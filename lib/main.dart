@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mine_app/getters.dart';
 import 'package:mine_app/src/core/theme/app_colors.dart';
-import 'package:mine_app/src/games_app.dart';
+import 'package:mine_app/games_app.dart';
 
 GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 

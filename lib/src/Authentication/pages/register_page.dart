@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mine_app/getters.dart';
 import 'package:mine_app/src/Games/Mine/pages/widgets/box_snack_bar.dart';
 import 'package:mine_app/src/Games/UserSection/controller/user_controller.dart';
-import 'package:mine_app/src/base/widgets/box_text_field.dart';
+import 'package:mine_app/src/shared/widgets/box_text_field.dart';
 import 'package:mine_app/src/core/routes.dart';
 import 'package:mine_app/src/core/theme/ui_helpers/ui_helpers.dart';
 import 'package:mine_app/src/core/utils/validator.dart';

@@ -44,8 +44,7 @@ class _MinePageState extends State<MinePage> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: colorSecondary),
             ),
-            child: Text(
-                'Score: ${getIt<UserController>().score.toStringAsFixed(2)}'), // Formatters.doubleToCurrency(0.0)
+            child: Text('Score: ${getIt<UserController>().score.toStringAsFixed(2)}'), // Formatters.doubleToCurrency(0.0)
           )
         ],
       ),

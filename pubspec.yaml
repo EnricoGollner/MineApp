@@ -23,9 +23,7 @@ dependencies:
   test: ^1.24.9
   animated_text_kit: ^4.2.2
   dartz: ^0.10.1
-  uuid: ^4.2.2
-  currency_text_input_formatter: ^2.1.13
-  
+  uuid: ^4.2.2  
 
 dev_dependencies:
   flutter_test:

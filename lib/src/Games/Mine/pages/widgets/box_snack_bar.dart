@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mine_app/src/base/enums/snack_bar_type.dart';
+import 'package:mine_app/src/shared/enums/snack_bar_type.dart';
 import 'package:mine_app/src/core/theme/ui_helpers/ui_helpers.dart';
 
 class BoxSnackBar extends StatelessWidget {

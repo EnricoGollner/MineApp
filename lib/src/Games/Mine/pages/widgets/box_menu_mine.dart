@@ -1,8 +1,8 @@
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:mine_app/src/Games/Mine/controller/mine_game_controller.dart';
 import 'package:mine_app/getters.dart';
-import 'package:mine_app/src/base/widgets/box_text_field.dart';
+import 'package:mine_app/src/shared/utils/decimal_text_input_formatter.dart';
+import 'package:mine_app/src/shared/widgets/box_text_field.dart';
 import 'package:mine_app/src/core/utils/formatters.dart';
 import 'package:mine_app/src/core/utils/validator.dart';
 import 'package:sizer/sizer.dart';
@@ -29,9 +29,8 @@ class BoxMenuMine extends StatelessWidget {
             keyboardType: TextInputType.number,
             
             inputFormatters: [
-              // DecimalInputFormatter.signalBasedOnLocale,
-              // DecimalInputFormatter(decimalRange: 2),
-              CurrencyTextInputFormatter()
+              DecimalInputFormatter.signalBasedOnLocale,
+              DecimalInputFormatter(decimalRange: 2),
             ],
           ),
         ),

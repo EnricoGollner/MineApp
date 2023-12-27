@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:mine_app/getters.dart';
 import 'package:mine_app/src/Games/UserSection/data/models/user_model.dart';
-import 'package:mine_app/src/base/repositories/db_repository.dart';
-import 'package:mine_app/src/base/utils/db_utils.dart';
+import 'package:mine_app/src/shared/repositories/db_repository.dart';
+import 'package:mine_app/src/shared/utils/db_utils.dart';
 import 'package:mine_app/src/core/errors/failure.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
