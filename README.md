@@ -1,2 +1,3 @@
-# MineApp
-Mini-Game inspired by minesweeper game
+# mine_app
+
+A new Flutter project.
