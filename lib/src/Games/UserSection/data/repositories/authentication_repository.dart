@@ -1,7 +1,7 @@
 import 'package:mine_app/getters.dart';
 import 'package:mine_app/src/Games/UserSection/data/models/request/user_model_request.dart';
+import 'package:mine_app/src/core/utils/db_utils.dart';
 import 'package:mine_app/src/shared/repositories/db_repository.dart';
-import 'package:mine_app/src/shared/utils/db_utils.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 class AuthenticationRepository {
