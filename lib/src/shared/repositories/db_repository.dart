@@ -1,6 +1,4 @@
-
-
-import 'package:mine_app/src/shared/utils/db_utils.dart';
+import 'package:mine_app/src/core/utils/db_utils.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBRepository {

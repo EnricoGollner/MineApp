@@ -1,14 +1,15 @@
 class DBUtils {
-  static const String userTable = "itemsTable";
+  static const String usersTable = 'usersTable';
 
-  static const String idUser = "idColumn";
-  static const String user = "user";
-  static const String value = "value";
+  static const String idColumn = 'idColumn';
+  static const String usernameColumn = 'usernameColumn';
+  static const String passwordColumn = 'passwordColumn';
+  static const String totalScoreColumn = 'totalScore';
 
-  static const String createTableQuery =
-      "CREATE TABLE ${DBUtils.userTable}("
-      "${DBUtils.idUser} VARCHAR(50) PRIMARY KEY,"
-      "${DBUtils.user} VARCHAR(100),"
-      "${DBUtils.value} DOUBLE"
-      ")";
+  static const String createTableUsersQuery =
+      "CREATE TABLE ${DBUtils.usersTable}("
+      "${DBUtils.idColumn} VARCHAR(50) PRIMARY KEY,"
+      "${DBUtils.usernameColumn} VARCHAR(20),"
+      "${DBUtils.passwordColumn} VARCHAR(40),"
+      "${DBUtils.totalScoreColumn} DOUBLE)";
 }

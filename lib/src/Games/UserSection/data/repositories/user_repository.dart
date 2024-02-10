@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:mine_app/getters.dart';
 import 'package:mine_app/src/Games/UserSection/data/models/user_model.dart';
+import 'package:mine_app/src/core/utils/db_utils.dart';
 import 'package:mine_app/src/shared/repositories/db_repository.dart';
-import 'package:mine_app/src/shared/utils/db_utils.dart';
 import 'package:mine_app/src/core/errors/failure.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
@@ -53,7 +53,7 @@ class UserRepository {
         DBUtils.idColumn,
         DBUtils.usernameColumn,
         DBUtils.passwordColumn,
-        DBUtils.scoresColumn,
+        DBUtils.totalScoreColumn,
       ],
       where: "${DBUtils.idColumn} = ?",
       whereArgs: [id],
@@ -91,7 +91,7 @@ class UserRepository {
     Database? dbMineApp = await getIt<DBRepository>().database;
 
     await dbMineApp?.rawUpdate(
-        "UPDATE ${DBUtils.usersTable} SET ${DBUtils.scoresColumn} = $newScore WHERE ${DBUtils.idColumn} = '$id'");
+        "UPDATE ${DBUtils.usersTable} SET ${DBUtils.totalScoreColumn} = $newScore WHERE ${DBUtils.idColumn} = '$id'");
   }
 
   Future<void> close() async {
