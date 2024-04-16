@@ -15,33 +15,32 @@ class BoxCardMine extends StatefulWidget {
 }
 
 class _BoxCardMineState extends State<BoxCardMine> with SingleTickerProviderStateMixin {
-  late final AnimationController animationController;
+  late AnimationController _animationController;
+  late MineGameController _mineGameController;
 
   @override
   void initState() {
     super.initState();
-
-    animationController = AnimationController(
+    _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
     );
+    _mineGameController = getIt<MineGameController>();
   }
 
   @override
   void dispose() {
     super.dispose();
-    animationController.dispose();
+    _animationController.dispose();
   }
 
   void flipCard() {
     if (widget.gameIcon != null) {
-      animationController.forward();
+      _animationController.forward();
 
-      if (widget.gameIcon == MdiIcons.bomb) {
-        getIt<MineGameController>().stopLostGame(context);
-      } else {
-        getIt<MineGameController>().addScore();
-      }
+      widget.gameIcon == MdiIcons.bomb
+        ? _mineGameController.stopLostGame(context)
+        : _mineGameController.addScore();
     }
   }
 
@@ -59,20 +58,20 @@ class _BoxCardMineState extends State<BoxCardMine> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    if (getIt<MineGameController>().isGameRunning) {
-      animationController.reset();
+    if (_mineGameController.gameIsRunning) {
+      _animationController.reset();
     }
 
     return AnimatedBuilder(
-      animation: animationController,
+      animation: _animationController,
       builder: (context, _) {
-        final angulo = animationController.value * pi;
+        final angulo = _animationController.value * pi;
         final transform = Matrix4.identity()
           ..setEntry(3, 2, 0.002)
           ..rotateY(angulo);
 
         return GestureDetector(
-          onTap: () => getIt<MineGameController>().isLoss ? null : flipCard(),
+          onTap: () => getIt<MineGameController>().gameIsLost ? null : flipCard(),
           child: Transform(
             transform: transform,
             alignment: Alignment.center,

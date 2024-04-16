@@ -7,6 +7,7 @@ import 'package:mine_app/src/core/theme/ui_helpers/ui_helpers.dart';
 import 'package:mine_app/src/Games/Mine/pages/widgets/box_card_mine.dart';
 
 import 'package:mine_app/src/Games/Mine/pages/widgets/box_dropdown_vertical.dart';
+import 'package:mine_app/src/core/utils/formatters.dart';
 
 class MinePage extends StatefulWidget {
   const MinePage({super.key});
@@ -17,16 +18,21 @@ class MinePage extends StatefulWidget {
 
 class _MinePageState extends State<MinePage> {
   late MineGameController _mineGameController;
+  final TextEditingController _newBetController = TextEditingController();
+
+  void updateState() => setState(() {});
 
   @override
   void initState() {
-    super.initState();
-
     _mineGameController = getIt<MineGameController>();
+    _mineGameController.addListener(updateState);
+    super.initState();
+  }
 
-    _mineGameController.addListener(() {
-      if (mounted) setState(() {});
-    });
+  @override
+  void dispose() {
+    _mineGameController.removeListener(updateState);
+    super.dispose();
   }
 
   @override
@@ -44,7 +50,9 @@ class _MinePageState extends State<MinePage> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: colorSecondary),
             ),
-            child: Text('Score: ${getIt<UserController>().score.toStringAsFixed(2)}'), // Formatters.doubleToCurrency(0.0)
+            child: ValueListenableBuilder(
+              valueListenable: getIt<UserController>().score,
+              builder: (context, score, child) => Text('Score: ${Formatters.doubleToCurrency(score)}')),
           )
         ],
       ),
@@ -58,14 +66,16 @@ class _MinePageState extends State<MinePage> {
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
-                  itemCount: _mineGameController.isGameRunning || _mineGameController.isLoss ? _mineGameController.gameOptions.length : 25,
+                  itemCount: _mineGameController.gameIsRunning ? _mineGameController.gameOptions.length : 25,
                   itemBuilder: (context, index) {
-                    return _mineGameController.isGameRunning || _mineGameController.isLoss ? BoxCardMine(gameIcon: _mineGameController.gameOptions[index]) : const BoxCardMine();
+                    return _mineGameController.gameIsRunning || _mineGameController.gameIsLost ? BoxCardMine(gameIcon: _mineGameController.gameOptions[index]) : const BoxCardMine();
                   },
               ),
               const SizedBox(height: 10),
               BoxMenuMine(
-                startGame: () => _mineGameController.startGame(scoreToBet: 2),
+                newBetController: _newBetController,
+                gameIsRunning: _mineGameController.gameIsRunning,
+                startGame: () => _mineGameController.startGame(context, scoreToBet: Formatters.defaultTextEditingControllerFormatter(text: _newBetController.text).toDouble()),
                 stopGame: _mineGameController.stopGame,
               ),
               const SizedBox(height: 10),
@@ -73,7 +83,7 @@ class _MinePageState extends State<MinePage> {
                 children: [
                   BoxDropdownVertical(
                     disabledHintText: 'Boa sorte!',
-                    enabled: !_mineGameController.isGameRunning,
+                    enabled: !_mineGameController.gameIsRunning,
                     onChanged: (newBombsQuantity) {
                       _mineGameController.updateMinesQuantity(newBombsQuantity as int);
                     },
@@ -88,9 +98,9 @@ class _MinePageState extends State<MinePage> {
                         )
                         .toList(),
                     isWhite: false,
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),

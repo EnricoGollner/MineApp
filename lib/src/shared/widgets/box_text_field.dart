@@ -5,6 +5,7 @@ import 'package:mine_app/src/core/theme/ui_helpers/ui_helpers.dart';
 ///Widget customizável de TextField
 class BoxTextField extends StatefulWidget {
   final String? label;
+  final bool enabled;
   final String hintText;
   final IconData? prefixIcon;
   final IconData? suffixicon;
@@ -29,6 +30,7 @@ class BoxTextField extends StatefulWidget {
 
   const BoxTextField({
     Key? key,
+    this.enabled = true,
     this.label,
     required this.hintText,
     this.onFieldSubmitted,
@@ -86,12 +88,12 @@ class _BoxTextFieldState extends State<BoxTextField> {
         SizedBox(
           height: widget.height,
           child: TextFormField(
+            enabled: widget.enabled,
             cursorColor: colorSecondary,
             style: textFieldStyle,
             onTapOutside: (event) {
               FocusManager.instance.primaryFocus?.unfocus();
-              widget.onTapOutside != null  ? widget.onTapOutside!(event) : null;
-
+              widget.onTapOutside != null ? widget.onTapOutside!(event) : null;
             },
             maxLength: widget.maxLength,
             onChanged: widget.onChanged,
@@ -110,7 +112,7 @@ class _BoxTextFieldState extends State<BoxTextField> {
             obscureText: _obscureText,
             onEditingComplete: widget.onEditingComplete,
             decoration: InputDecoration(
-              counterText: "",
+              counterText: '',
               focusedErrorBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: colorError, width: 2),
                 borderRadius: BorderRadius.all(
@@ -126,6 +128,12 @@ class _BoxTextFieldState extends State<BoxTextField> {
               enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: colorBorderField, width: 2),
                 borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: colorBorderField.withOpacity(0.5), width: 2),
+                borderRadius: const BorderRadius.all(
                   Radius.circular(15),
                 ),
               ),

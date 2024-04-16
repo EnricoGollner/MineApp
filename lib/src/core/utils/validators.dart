@@ -1,6 +1,6 @@
 import 'dart:io';
-
-import 'package:flutter/src/widgets/editable_text.dart';
+import 'package:flutter/material.dart';
+import 'package:mine_app/src/core/utils/formatters.dart';
 
 class Validators {
   final String text;
@@ -11,6 +11,22 @@ class Validators {
     if(text == null || text.isEmpty) {
       return "This field is required";
     }
+
+    return null;
+  }
+  ///Método que verifica se um determinado valor é maior que um valor mínimo
+  static String? greaterThanMinValueRequired(String? value, {num minValue = 0, required String nomeCampo, FocusNode? focusNode}) {
+    String? mensagem = Validators.isRequired(value);
+    if (mensagem != null) {
+      focusNode?.requestFocus();
+      return mensagem;
+    }
+
+    final num numValue = Formatters.defaultTextEditingControllerFormatter(text: value!);
+    if (numValue <= minValue) {
+    focusNode?.requestFocus();
+    return '$nomeCampo deve ser igual ou maior que $minValue';
+  }
 
     return null;
   }

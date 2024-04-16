@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mine_app/getters.dart';
 import 'package:mine_app/src/Games/UserSection/data/repositories/user_repository.dart';
 
 class UserController extends ChangeNotifier {
-  double _score = 0.0;
-  double get score => _score;
+  final ValueNotifier<double> score = ValueNotifier<double>(10.0);
 
-  Future<void> addScore(double value) async {
-    _score += value;
-    // await getIt<UserRepository>().updateScore(, score);
-    notifyListeners();
+  Future<bool> updateScore(double value) async {
+    if (value.abs() > score.value) return false;
+
+    score.value += value;
+    // await getIt<UserRepository>().updateScore(, score.value);
+    return true;
   }
 
   Future<String> registerUser({required String username, required String password}) async {

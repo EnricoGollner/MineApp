@@ -18,4 +18,27 @@ class Formatters {
       return NumberFormat.currency(symbol: symbol, locale: Platform.localeName).format(value);
     }
   }
+
+  static num defaultTextEditingControllerFormatter({required String text, bool isDecimal = true}) {
+    if (text.isEmpty) {
+      if (isDecimal) {
+        return 0.0;
+      } else {
+        return 0;
+      }
+    } else {
+      text = text.replaceAll('R\$ ', '');
+      if (isDecimal) {
+        if (Platform.localeName == 'pt_BR') {
+          text = text.replaceAll('.', '');
+          text = text.replaceAll(',', '.');
+        } else if (Platform.localeName == 'en_US') {
+          text = text.replaceAll(',', '');
+        }
+        return double.parse(text);
+      } else {
+        return int.parse(text);
+      }
+    }
+  }
 }
