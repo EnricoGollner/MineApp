@@ -3,13 +3,13 @@ import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 
 class DecimalInputFormatter extends TextInputFormatter {
   final int decimalRange;
+  final bool isCurrency;
   final String currencySymbol;
 
-  DecimalInputFormatter({this.decimalRange = 2, this.currencySymbol = 'R\$'});
+  DecimalInputFormatter({this.decimalRange = 2, this.isCurrency = false, this.currencySymbol = 'R\$'});
 
   static FilteringTextInputFormatter get signalBasedOnLocale => Platform.localeName == 'pt_BR'
     ? FilteringTextInputFormatter.allow(RegExp("[0-9,]"))
@@ -61,7 +61,13 @@ class DecimalInputFormatter extends TextInputFormatter {
       newSelection = oldValue.selection;
     }
 
-    truncated = NumberFormat.currency(symbol: currencySymbol, decimalDigits: decimalRange).format(double.parse(truncated.replaceAll(currencySymbol, '')));
+    if (isCurrency && value.isNotEmpty) {  // Quando o campo estiver vazio, o símbolo da moeda não será adicionado
+      truncated = "R\$ ${truncated.replaceAll('R\$ ', '')}";
+      newSelection = oldValue.selection.copyWith(
+        baseOffset: math.min(truncated.length, truncated.length + 1),
+        extentOffset: math.min(truncated.length, truncated.length + 1),
+      );
+    }
 
     return TextEditingValue(
       text: truncated,

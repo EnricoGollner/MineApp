@@ -4,7 +4,7 @@ import 'package:mine_app/getters.dart';
 import 'package:mine_app/src/core/utils/decimal_text_input_formatter.dart';
 import 'package:mine_app/src/shared/widgets/box_text_field.dart';
 import 'package:mine_app/src/core/utils/formatters.dart';
-import 'package:mine_app/src/core/utils/validator.dart';
+import 'package:mine_app/src/core/utils/validators.dart';
 import 'package:sizer/sizer.dart';
 
 class BoxMenuMine extends StatelessWidget {
@@ -25,12 +25,13 @@ class BoxMenuMine extends StatelessWidget {
             height: 50,
             controller: _newBetController,
             hintText: Formatters.doubleToCurrency(0.0),
-            validatorFunction: Validator.isRequired,
+            validatorFunction: Validators.isRequired,
             keyboardType: TextInputType.number,
-            
+            onEditingComplete: () => Validators.handleDecimal(_newBetController),
+            onTapOutside: (event) => Validators.handleDecimal(_newBetController),
             inputFormatters: [
               DecimalInputFormatter.signalBasedOnLocale,
-              DecimalInputFormatter(decimalRange: 2),
+              DecimalInputFormatter(decimalRange: 2, isCurrency: true),
             ],
           ),
         ),

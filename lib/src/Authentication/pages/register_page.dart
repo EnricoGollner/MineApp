@@ -5,7 +5,7 @@ import 'package:mine_app/src/Games/UserSection/controller/user_controller.dart';
 import 'package:mine_app/src/shared/widgets/box_text_field.dart';
 import 'package:mine_app/src/core/routes.dart';
 import 'package:mine_app/src/core/theme/ui_helpers/ui_helpers.dart';
-import 'package:mine_app/src/core/utils/validator.dart';
+import 'package:mine_app/src/core/utils/validators.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -35,14 +35,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 label: 'Username',
                 hintText: 'Type your username',
                 controller: _usernameTextController,
-                validatorFunction: Validator.isRequired,
+                validatorFunction: Validators.isRequired,
               ),
               const SizedBox(height: 10),
               BoxTextField(
                 label: 'Password',
                 hintText: 'Type your password',
                 controller: _passwordTextController,
-                validatorFunction: Validator.isRequired,
+                validatorFunction: Validators.isRequired,
               ),
               const SizedBox(height: 10),
               ElevatedButton(

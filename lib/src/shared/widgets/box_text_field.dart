@@ -24,6 +24,8 @@ class BoxTextField extends StatefulWidget {
   final FocusNode? focusNode;
   final bool isAutoFocus;
   final Function()? onPressed;
+  final VoidCallback? onEditingComplete;
+  final void Function(PointerDownEvent)? onTapOutside;
 
   const BoxTextField({
     Key? key,
@@ -47,6 +49,8 @@ class BoxTextField extends StatefulWidget {
     this.focusNode,
     this.onPressed,
     this.initialValue,
+    this.onEditingComplete,
+    this.onTapOutside,
   }) : super(key: key);
 
   @override
@@ -84,7 +88,11 @@ class _BoxTextFieldState extends State<BoxTextField> {
           child: TextFormField(
             cursorColor: colorSecondary,
             style: textFieldStyle,
-            onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+            onTapOutside: (event) {
+              FocusManager.instance.primaryFocus?.unfocus();
+              widget.onTapOutside != null  ? widget.onTapOutside!(event) : null;
+
+            },
             maxLength: widget.maxLength,
             onChanged: widget.onChanged,
             focusNode: widget.focusNode,
@@ -100,73 +108,70 @@ class _BoxTextFieldState extends State<BoxTextField> {
             validator: widget.validatorFunction,
             inputFormatters: widget.inputFormatters,
             obscureText: _obscureText,
+            onEditingComplete: widget.onEditingComplete,
             decoration: InputDecoration(
-                    counterText: "",
-                    focusedErrorBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: colorError, width: 2),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(15), 
+              counterText: "",
+              focusedErrorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: colorError, width: 2),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+              errorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: colorError, width: 1),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: colorBorderField, width: 2),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: colorSelectedField, width: 2.5),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+              prefixIcon: widget.prefixIcon != null
+                  ? Icon(
+                      widget.prefixIcon,
+                      color: colorSecondary,
+                    )
+                  : null,
+              prefixIconConstraints: BoxConstraints.tight(const Size(60, 25)),
+              suffixIcon: widget.isPassword
+                  ? GestureDetector(
+                      child: Icon(
+                        _obscureText ? Icons.visibility : Icons.visibility_off,
+                        size: 24,
+                        color: colorPrimary,
+                      ),
+                      onTap: () {
+                        setState(
+                          () {
+                            _obscureText = !_obscureText;
+                          },
+                        );
+                      },
+                    )
+                  : GestureDetector(
+                      onTap: widget.onPressed,
+                      child: Icon(
+                        widget.suffixicon,
+                        color: colorPrimary,
                       ),
                     ),
-                    errorBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: colorError, width: 1),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(15),
-                      ),
-                    ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: colorBorderField, width: 2),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(15),
-                      ),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: colorSelectedField, width: 2.5),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(15),
-                      ),
-                    ),
-                    prefixIcon: widget.prefixIcon != null
-                        ? Icon(
-                            widget.prefixIcon,
-                            color: colorSecondary,
-                          )
-                        : null,
-                    prefixIconConstraints: BoxConstraints.tight(const Size(60, 25)),
-                    suffixIcon: widget.isPassword
-                        ? GestureDetector(
-                            child: Icon(
-                              _obscureText
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              size: 24,
-                              color: colorPrimary,
-                            ),
-                            onTap: () {
-                              setState(
-                                () {
-                                  _obscureText = !_obscureText;
-                                },
-                              );
-                            },
-                          )
-                        : GestureDetector(
-                            onTap: widget.onPressed,
-                            child: Icon(
-                              widget.suffixicon,
-                              color: colorPrimary,
-                            ),
-                          ),
-                    suffixIconConstraints: BoxConstraints.tight(const Size(60, 25)),
-                    filled: true,
-                    hintStyle: hintTextStyle,
-                    hintText: widget.hintText,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                    fillColor: widget.isWhite
-                        ? colorOnPrimary
-                        : colorTextField,
-                  ),
+              suffixIconConstraints: BoxConstraints.tight(const Size(60, 25)),
+              filled: true,
+              hintStyle: hintTextStyle,
+              hintText: widget.hintText,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              fillColor: widget.isWhite ? colorOnPrimary : colorTextField,
+            ),
           ),
         ),
       ],
