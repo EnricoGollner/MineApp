@@ -33,6 +33,7 @@ class MineGameController extends ChangeNotifier {
 
   Future<void> startGame(BuildContext context, {required double scoreToBet}) async {
     _changeGameState(newState: GameState.running);
+    _scoreBet = scoreToBet;
 
     await _userController.updateScore(-scoreToBet).then((transactionAccepted) {
       if (!transactionAccepted) {

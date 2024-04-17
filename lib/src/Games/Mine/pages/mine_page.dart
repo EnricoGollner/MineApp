@@ -18,20 +18,18 @@ class MinePage extends StatefulWidget {
 
 class _MinePageState extends State<MinePage> {
   late MineGameController _mineGameController;
-  final TextEditingController _newBetController = TextEditingController();
-
-  void updateState() => setState(() {});
+  final TextEditingController _newBetTxtController = TextEditingController();
 
   @override
   void initState() {
     _mineGameController = getIt<MineGameController>();
-    _mineGameController.addListener(updateState);
     super.initState();
   }
 
   @override
   void dispose() {
-    _mineGameController.removeListener(updateState);
+    _mineGameController.dispose();
+    _newBetTxtController.dispose();
     super.dispose();
   }
 
@@ -60,9 +58,11 @@ class _MinePageState extends State<MinePage> {
         child: UIPadding(
           useVerticalPadding: true,
           useHorizontalPadding: true,
-          child: Column(
-            children: [
-              GridView.builder(
+          child: ListenableBuilder(
+            listenable: _mineGameController,
+            builder: (context, child) => Column(
+              children: [
+                GridView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
@@ -70,38 +70,35 @@ class _MinePageState extends State<MinePage> {
                   itemBuilder: (context, index) {
                     return _mineGameController.gameIsRunning || _mineGameController.gameIsLost ? BoxCardMine(gameIcon: _mineGameController.gameOptions[index]) : const BoxCardMine();
                   },
-              ),
-              const SizedBox(height: 10),
-              BoxMenuMine(
-                newBetController: _newBetController,
-                gameIsRunning: _mineGameController.gameIsRunning,
-                startGame: () => _mineGameController.startGame(context, scoreToBet: Formatters.defaultTextEditingControllerFormatter(text: _newBetController.text).toDouble()),
-                stopGame: _mineGameController.stopGame,
-              ),
-              const SizedBox(height: 10),
-              Column(
-                children: [
-                  BoxDropdownVertical(
-                    disabledHintText: 'Boa sorte!',
-                    enabled: !_mineGameController.gameIsRunning,
-                    onChanged: (newBombsQuantity) {
-                      _mineGameController.updateMinesQuantity(newBombsQuantity as int);
-                    },
-                    initialValue: _mineGameController.minesQuantity,
-                    label: 'NÚMERO DE MINAS',
-                    items: List.generate(12, (index) => (index + 1) * 2)
-                        .map(
-                          (e) => DropdownMenuItem(
-                            value: e,
-                            child: Text('$e'),
-                          ),
-                        )
-                        .toList(),
-                    isWhite: false,
-                  ),
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(height: 10),
+                BoxMenuMine(
+                  betTextController: _newBetTxtController,
+                  gameIsRunning: _mineGameController.gameIsRunning,
+                  startGame: () => _mineGameController.startGame(context, scoreToBet: Formatters.defaultTextEditingControllerFormatter(text: _newBetTxtController.text).toDouble()),
+                  stopGame: _mineGameController.stopGame,
+                ),
+                const SizedBox(height: 10),
+                BoxDropdown<int>(
+                  disabledHintText: 'Boa sorte!',
+                  enabled: !_mineGameController.gameIsRunning,
+                  onChanged: (newBombsQuantity) {
+                    _mineGameController.updateMinesQuantity(newBombsQuantity);
+                  },
+                  initialValue: _mineGameController.minesQuantity,
+                  label: 'NÚMERO DE MINAS',
+                  items: List.generate(12, (index) => (index + 1) * 2)
+                      .map(
+                        (e) => DropdownMenuItem(
+                          value: e,
+                          child: Text('$e'),
+                        ),
+                      )
+                      .toList(),
+                  isWhite: false,
+                ),
+              ],
+            ), 
           ),
         ),
       ),

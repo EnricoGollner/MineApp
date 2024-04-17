@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mine_app/src/core/theme/ui_helpers/ui_helpers.dart';
 
 ///cria um dropDown customizado
-class BoxDropdownVertical extends StatelessWidget {
+class BoxDropdown<T> extends StatelessWidget {
   final Function(dynamic)? onChanged;
   final IconData? prefixIconData;
-  final dynamic initialValue;
+  final T initialValue;
   final List<DropdownMenuItem<Object>> items;
   final String label;
   final String? disabledHintText;
@@ -15,7 +15,7 @@ class BoxDropdownVertical extends StatelessWidget {
   final VoidCallback? onTap;
   final bool isWhite;
 
-  const BoxDropdownVertical({
+  const BoxDropdown({
     Key? key,
     this.prefixIconData,
     required this.onChanged,

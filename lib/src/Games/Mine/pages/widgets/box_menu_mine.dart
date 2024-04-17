@@ -10,18 +10,17 @@ class BoxMenuMine extends StatelessWidget {
   final bool gameIsRunning;
   final void Function() startGame;
   final void Function() stopGame;
-  final TextEditingController newBetController;
+  final TextEditingController betTextController;
 
   BoxMenuMine({
     super.key,
     required this.gameIsRunning,
     required this.startGame,
     required this.stopGame,
-    required this.newBetController,
+    required this.betTextController,
   });
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +32,12 @@ class BoxMenuMine extends StatelessWidget {
             child: BoxTextField(
               enabled: !gameIsRunning,
               isOntapClear: true,
-              controller: newBetController,
+              controller: betTextController,
               hintText: Formatters.doubleToCurrency(0.0),
               validatorFunction: (newValue) => Validators.greaterThanMinValueRequired(newValue, nomeCampo: 'Valor da aposta', minValue: 0.1),
               keyboardType: TextInputType.number,
-              onEditingComplete: () => Validators.handleDecimal(newBetController),
-              onTapOutside: (event) => Validators.handleDecimal(newBetController),
+              onEditingComplete: () => Validators.handleDecimal(betTextController),
+              onTapOutside: (event) => Validators.handleDecimal(betTextController),
               inputFormatters: [
                 DecimalInputFormatter.signalBasedOnLocale,
                 DecimalInputFormatter(decimalRange: 2, isCurrency: true),
@@ -70,7 +69,7 @@ class BoxMenuMine extends StatelessWidget {
   }
 
   void _stopGame() {
-    newBetController.text = Formatters.doubleToCurrency(0.0);
+    betTextController.text = Formatters.doubleToCurrency(0.0);
     stopGame();
   }
 }
