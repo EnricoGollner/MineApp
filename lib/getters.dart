@@ -5,8 +5,7 @@ import 'package:mine_app/src/Games/UserSection/data/repositories/authentication_
 import 'package:mine_app/src/Games/UserSection/data/repositories/user_repository.dart';
 import 'package:mine_app/src/shared/repositories/db_repository.dart';
 
-final getIt = GetIt.instance;
-
+final GetIt getIt = GetIt.instance;
 void setUpGetIt() {
   getIt.registerLazySingleton<DBRepository>(() => DBRepository());
 

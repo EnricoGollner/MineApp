@@ -37,14 +37,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 controller: _usernameTextController,
                 validatorFunction: Validators.isRequired,
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10.s),
               BoxTextField(
                 label: 'Password',
                 hintText: 'Type your password',
                 controller: _passwordTextController,
                 validatorFunction: Validators.isRequired,
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10.s),
               ElevatedButton(
                 onPressed: () async => await _validateRegister(),
                 child: const Text('Register'),
@@ -61,7 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
       username: _usernameTextController.text,
       password: _passwordTextController.text,
     ).then((errorMessage) {
-      errorMessage.isEmpty ? Navigator.popAndPushNamed(context, home) : showSnackBar(context, BoxSnackBar.error(message: errorMessage));
+      errorMessage.isEmpty ? Navigator.popAndPushNamed(context, AppRoutes.home) : showSnackBar(context, BoxSnackBar.error(message: errorMessage));
     });
   }
 }

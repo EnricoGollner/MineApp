@@ -41,7 +41,7 @@ class BoxDropdown<T> extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: UIText.dropdownLabel(label),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.s),
           DropdownButtonFormField<dynamic>(
             disabledHint: disabledHintText != null ? UIText.dropdownHintRunning(disabledHintText!) : null,
             focusNode: focusNode,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mine_app/src/Games/pages/home_page.dart';
 import 'package:mine_app/src/core/routes.dart';
 import 'package:mine_app/src/core/theme/styles.dart';
 import 'package:sizer/sizer.dart';
@@ -16,7 +15,7 @@ class GamesApp extends StatelessWidget {
           onGenerateRoute: CustomRouter.generateRoutes,
           navigatorKey: CustomRouter.navigatorKey,
           theme: Styles.setMaterialTheme3(context),
-          home: const HomePage(),
+          initialRoute: AppRoutes.login,
         );
       },
     );

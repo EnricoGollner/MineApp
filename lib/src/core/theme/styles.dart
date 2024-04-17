@@ -14,6 +14,10 @@ class Styles {
       elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(backgroundColor: colorSecondary)),
       dropdownMenuTheme: DropdownMenuThemeData(textStyle: dropdownTextStyle),
       iconTheme: const IconThemeData(color: colorPrimary),
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.resolveWith((states) => states.contains(MaterialState.selected) ? colorOnPrimary : colorSecondary),
+        trackColor: MaterialStateProperty.resolveWith((states) => states.contains(MaterialState.selected) ? colorSecondary : colorPrimary.withOpacity(0.5)),
+      ),
       colorScheme: const ColorScheme(
         brightness: Brightness.light,
         primary: colorPrimary,

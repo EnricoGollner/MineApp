@@ -11,7 +11,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String?,
       username: json['username'] as String,
       password: json['password'] as String,
-      scores: (json['scores'] as num).toDouble(),
+      scores: (json['scores'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>

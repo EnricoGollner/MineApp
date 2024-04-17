@@ -5,9 +5,11 @@ import 'package:mine_app/src/Authentication/pages/register_page.dart';
 import 'package:mine_app/src/Games/pages/home_page.dart';
 
 ///Classe de gerenciamento de rotas da aplicação
-const String login = "/login";
-const String register = "/register";
-const String home = '/homePage';
+abstract class AppRoutes {
+  static const String login = '/login';
+  static const String register = '/register';
+  static const String home = '/home';
+}
 
 class CustomRouter {
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -20,11 +22,11 @@ class CustomRouter {
     // }
 
     switch (settings.name) {
-      case login:
+      case AppRoutes.login:
         return MaterialPageRoute(settings: settings, builder: (_) => const AuthenticationPage());
-      case register:
+      case AppRoutes.register:
         return MaterialPageRoute(settings: settings, builder: (_) => const RegisterPage());
-      case home:
+      case AppRoutes.home:
         return MaterialPageRoute(settings: settings, builder: (_) => const HomePage());
     }
     return null;

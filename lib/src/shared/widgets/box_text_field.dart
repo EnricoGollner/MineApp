@@ -155,7 +155,7 @@ class _BoxTextFieldState extends State<BoxTextField> {
                       child: Icon(
                         _obscureText ? Icons.visibility : Icons.visibility_off,
                         size: 24,
-                        color: colorPrimary,
+                        color: colorSecondary,
                       ),
                       onTap: () {
                         setState(

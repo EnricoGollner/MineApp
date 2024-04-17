@@ -28,7 +28,6 @@ class _MinePageState extends State<MinePage> {
 
   @override
   void dispose() {
-    _mineGameController.dispose();
     _newBetTxtController.dispose();
     super.dispose();
   }
@@ -71,14 +70,14 @@ class _MinePageState extends State<MinePage> {
                     return _mineGameController.gameIsRunning || _mineGameController.gameIsLost ? BoxCardMine(gameIcon: _mineGameController.gameOptions[index]) : const BoxCardMine();
                   },
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.s),
                 BoxMenuMine(
                   betTextController: _newBetTxtController,
                   gameIsRunning: _mineGameController.gameIsRunning,
                   startGame: () => _mineGameController.startGame(context, scoreToBet: Formatters.defaultTextEditingControllerFormatter(text: _newBetTxtController.text).toDouble()),
                   stopGame: _mineGameController.stopGame,
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.s),
                 BoxDropdown<int>(
                   disabledHintText: 'Boa sorte!',
                   enabled: !_mineGameController.gameIsRunning,
