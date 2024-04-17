@@ -15,7 +15,7 @@ class GamesApp extends StatelessWidget {
           onGenerateRoute: CustomRouter.generateRoutes,
           navigatorKey: CustomRouter.navigatorKey,
           theme: Styles.setMaterialTheme3(context),
-          initialRoute: AppRoutes.login,
+          initialRoute: AppRoutes.home,
         );
       },
     );

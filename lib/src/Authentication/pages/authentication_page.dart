@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mine_app/getters.dart';
-import 'package:mine_app/src/Games/UserSection/data/models/request/user_model_request.dart';
+import 'package:mine_app/src/Authentication/controllers/authentication_controller.dart';
 import 'package:mine_app/src/Games/UserSection/data/models/user_model.dart';
-import 'package:mine_app/src/Games/UserSection/data/repositories/authentication_repository.dart';
+import 'package:mine_app/src/Games/UserSection/data/repositories/user_repository.dart';
 import 'package:mine_app/src/core/routes.dart';
 import 'package:mine_app/src/shared/widgets/box_text_field.dart';
 import 'package:mine_app/src/core/theme/ui_helpers/ui_helpers.dart';
@@ -82,34 +82,30 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   }
 
   Future<void> _saveUser() async {
-    _rememberUser ? await getIt<AuthenticationRepository>().saveUserAuthentication(
+    _rememberUser ? await getIt<UserRepository>().saveUserAuthentication(
       UserModel(
         username: _usernameTextController.text,
         password: _passwordTextController.text,
       ),
-    ) : await getIt<AuthenticationRepository>().deleteUserAuthentication();
+    ) : await getIt<UserRepository>().deleteUserAuthentication();
   }
 
   Future<void> _validateLogin() async {
     if (_formKey.currentState!.validate()) {
       await _saveUser();
 
-      await getIt<AuthenticationRepository>().authenticate(
-        UserModelRequest(
-          username: _usernameTextController.text,
-          password: _passwordTextController.text,
-        ),
-    ).then((value) {
-      if (value) {
-        Navigator.pushReplacementNamed(context, AppRoutes.home);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Invalid username or password'),
-          ),
-        );
-      }
-    });
+      await getIt<AuthenticationController>().authenticate(
+        username: _usernameTextController.text,
+        password: _passwordTextController.text,
+      ).then((errorMessage) {
+        errorMessage.isEmpty
+          ? Navigator.pushReplacementNamed(context, AppRoutes.home)
+          : ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Invalid username or password'),
+              ),
+            );
+      });
     }
   }
 }

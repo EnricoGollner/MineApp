@@ -1,3 +1,3 @@
 # mine_app
 
-A new Flutter project.
+A mineswapper inspired game built with Flutter and local database.

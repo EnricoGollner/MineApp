@@ -1,39 +1,38 @@
-import 'package:dartz/dartz.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mine_app/getters.dart';
 import 'package:mine_app/src/Games/UserSection/data/models/user_model.dart';
 import 'package:mine_app/src/core/utils/db_utils.dart';
+import 'package:mine_app/src/core/utils/local_storage_keys.dart';
 import 'package:mine_app/src/shared/repositories/db_repository.dart';
-import 'package:mine_app/src/core/errors/failure.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:uuid/uuid.dart';
 
 class UserRepository {
-  Future<Either<Failure, bool>> registerUser(
-      {required String username, required String password}) async {
-    try {
-      Database? dbItemsShop = await getIt<DBRepository>().database;
-
-      await dbItemsShop?.insert(
-        DBUtils.usersTable,
-        UserModel(
-          id: const Uuid().v4(),
-          username: username,
-          password: password,
-          scores: 0,
-        ).toJson(),
-      );
-
-      return const Right(true);
-    } catch (e) {
-      return Left(Failure(message: e.toString()));
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+  
+  Future<void> saveUserAuthentication(UserModel userModelRequest) {
+      return getIt<DBRepository>().database.then((db) async {
+        await _secureStorage.write(key: LocalStorageKeys.user, value: userModelRequest.username);
+        await _secureStorage.write(key: LocalStorageKeys.password, value: userModelRequest.password);
+      });
     }
-  }
+
+    Future<UserModel> getUserAuthentication() async {
+      String? username = await _secureStorage.read(key: LocalStorageKeys.user);
+      String? password = await  _secureStorage.read(key: LocalStorageKeys.password);
+
+      return UserModel(username: username ?? '', password: password ?? '');
+    }
+
+    Future<void> deleteUserAuthentication() async {
+      await _secureStorage.delete(key: LocalStorageKeys.user);
+      await _secureStorage.delete(key: LocalStorageKeys.password);
+    }
+
 
   Future<List<UserModel>> getAllUsers() async {
     Database? dbMineApp = await getIt<DBRepository>().database;
 
-    List<Map<String, dynamic>>? jsonList =
-        await dbMineApp?.rawQuery("SELECT * FROM ${DBUtils.usersTable}");
+    List<Map<String, dynamic>>? jsonList = await dbMineApp?.rawQuery("SELECT * FROM ${DBUtils.usersTable}");
 
     if (jsonList != null) {
       List<UserModel> listItemsToShop =
@@ -90,8 +89,7 @@ class UserRepository {
   Future<void> updateScore(String id, double newScore) async {
     Database? dbMineApp = await getIt<DBRepository>().database;
 
-    await dbMineApp?.rawUpdate(
-        "UPDATE ${DBUtils.usersTable} SET ${DBUtils.totalScoreColumn} = $newScore WHERE ${DBUtils.idColumn} = '$id'");
+    await dbMineApp?.rawUpdate("UPDATE ${DBUtils.usersTable} SET ${DBUtils.totalScoreColumn} = $newScore WHERE ${DBUtils.idColumn} = '$id'");
   }
 
   Future<void> close() async {

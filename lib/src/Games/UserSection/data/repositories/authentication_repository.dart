@@ -1,46 +1,50 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mine_app/getters.dart';
 import 'package:mine_app/src/Games/UserSection/data/models/request/user_model_request.dart';
 import 'package:mine_app/src/Games/UserSection/data/models/user_model.dart';
+import 'package:mine_app/src/core/errors/failure.dart';
 import 'package:mine_app/src/core/utils/db_utils.dart';
-import 'package:mine_app/src/core/utils/local_storage_keys.dart';
 import 'package:mine_app/src/shared/repositories/db_repository.dart';
 import 'package:sqflite/sqlite_api.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthenticationRepository {
-  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
-
-
-  Future<bool> authenticate(UserModelRequest user) async {
+  Future<({Failure? error, bool? authenticated})> authenticate(UserModelRequest user) async {
     Database? dbUsers = await getIt<DBRepository>().database;
 
     try {
+      String query = "SELECT * FROM ${DBUtils.usersTable} WHERE ${DBUtils.usernameColumn} = '${user.username}' AND ${DBUtils.passwordColumn} = '${user.password}'";
       List<Map<String, Object?>>? usersFound = await dbUsers?.rawQuery(
-        "SELECT * FROM ${DBUtils.usersTable} WHERE ${DBUtils.usernameColumn} = ${user.username} AND ${DBUtils.passwordColumn} = ${user.password}"
+        query,
       );
-
-      return usersFound?.isEmpty ?? false;
+      return (error: null, authenticated: usersFound != null && usersFound.isNotEmpty);
     } catch (e) {
-      return false;
+      return (error: Failure(message: e.toString()), authenticated: null);
     }
   }
 
-  Future<void> saveUserAuthentication(UserModel userModelRequest) {
-    return getIt<DBRepository>().database.then((db) async {
-      await _secureStorage.write(key: LocalStorageKeys.user, value: userModelRequest.username);
-      await _secureStorage.write(key: LocalStorageKeys.password, value: userModelRequest.password);
-    });
-  }
+    Future<({Failure? error, bool? registered})> registerUser({required String username, required String password}) async {
+    try {
+      Database? dbMineApp = await getIt<DBRepository>().database;
 
-  Future<UserModel> getUserAuthentication() async {
-    String? username = await _secureStorage.read(key: LocalStorageKeys.user);
-    String? password = await  _secureStorage.read(key: LocalStorageKeys.password);
+      final List<Map<String, Object?>>? users = await dbMineApp?.rawQuery("SELECT * FROM ${DBUtils.usersTable} WHERE ${DBUtils.usernameColumn} = '$username'");
+      if (users != null && users.isNotEmpty) {
+        return (error: Failure(message: 'User already exists'), registered: null);
+      }
 
-    return UserModel(username: username ?? '', password: password ?? '');
-  }
+      await dbMineApp?.insert(
+        DBUtils.usersTable,
+        UserModel(
+          id: const Uuid().v4(),
+          username: username,
+          password: password,
+          totalScore: 0,
+        ).toJson(),
+        
+      );
 
-  Future<void> deleteUserAuthentication() async {
-    await _secureStorage.delete(key: LocalStorageKeys.user);
-    await _secureStorage.delete(key: LocalStorageKeys.password);
+      return (error: null, registered: true);
+    } catch (error) {
+      return (error: Failure(message: error.toString()), registered: null);
+    }
   }
 }
