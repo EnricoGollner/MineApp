@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mine_app/getters.dart';
 import 'package:mine_app/src/Games/Mine/controller/mine_game_controller.dart';
+import 'package:mine_app/src/Games/Mine/pages/widgets/box_snack_bar.dart';
+import 'package:mine_app/src/core/theme/ui_helpers/ui_helpers.dart';
 import 'package:mine_app/src/core/utils/decimal_text_input_formatter.dart';
 import 'package:mine_app/src/shared/widgets/box_text_field.dart';
 import 'package:mine_app/src/core/utils/formatters.dart';
@@ -20,51 +22,58 @@ class BoxMenuMine extends StatelessWidget {
     required this.betTextController,
   });
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final FocusNode _betFocusNode = FocusNode();
+
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Row(
-        children: [
-          Expanded(
-            child: BoxTextField(
-              enabled: !gameIsRunning,
-              isOntapClear: true,
-              controller: betTextController,
-              hintText: Formatters.doubleToCurrency(0.0),
-              validatorFunction: (newValue) => Validators.greaterThanMinValueRequired(newValue, nomeCampo: 'Valor da aposta', minValue: 0.1),
-              keyboardType: TextInputType.number,
-              onEditingComplete: () => Validators.handleDecimal(betTextController),
-              onTapOutside: (event) => Validators.handleDecimal(betTextController),
-              inputFormatters: [
-                DecimalInputFormatter.signalBasedOnLocale,
-                DecimalInputFormatter(decimalRange: 2, isCurrency: true),
-              ],
-            ),
+    return Row(
+      children: [
+        Expanded(
+          child: BoxTextField(
+            enabled: !gameIsRunning,
+            isOntapClear: true,
+            controller: betTextController,
+            hintText: Formatters.doubleToCurrency(0.0),
+            keyboardType: TextInputType.number,
+            onEditingComplete: () => Validators.handleDecimal(betTextController),
+            onTapOutside: (event) => Validators.handleDecimal(betTextController),
+            inputFormatters: [
+              DecimalInputFormatter.signalBasedOnLocale,
+              DecimalInputFormatter(decimalRange: 2, isCurrency: true),
+            ],
           ),
-          const SizedBox(width: 10),
-          ValueListenableBuilder(
-            valueListenable: getIt<MineGameController>().gains,
-            builder: (context, gainsNumber, child) => ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        SizedBox(width: 10.s),
+        ValueListenableBuilder(
+          valueListenable: getIt<MineGameController>().gains,
+          builder: (_, gainsNumber, __) {
+            return SizedBox(
+              height: 54.s,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
                 ),
-              ),
-              onPressed: gameIsRunning && gainsNumber == 0 ? null : () {
-                if (_formKey.currentState!.validate()) {
+                onPressed: gameIsRunning && gainsNumber == 0 ? null : () {
+                  final String? error = Validators.greaterThanMinValueRequired(betTextController.text, nomeCampo: 'Valor da aposta', minValue: 0.1, focusNode: _betFocusNode);
+    
+                  if (error != null) {
+                    showSnackBar(context, BoxSnackBar.error(message: error));
+                    return;
+                  }
+                  
                   gameIsRunning ? _stopGame() : startGame();
-                }
-              },
-              child: gameIsRunning
-                  ? const Text("PARAR")
-                  : const Text("COMEÇAR"),
-            ),
-          ),
-        ],
-      ),
+                },
+                child: gameIsRunning
+                    ? const Text("PARAR")
+                    : const Text("COMEÇAR"),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 

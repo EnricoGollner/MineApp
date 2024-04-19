@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:mine_app/src/Authentication/pages/authentication_page.dart';
 import 'package:mine_app/src/Authentication/pages/register_page.dart';
-import 'package:mine_app/src/Games/pages/home_page.dart';
+import 'package:mine_app/src/Games/Home/home_page.dart';
 
 ///Classe de gerenciamento de rotas da aplicação
 abstract class AppRoutes {

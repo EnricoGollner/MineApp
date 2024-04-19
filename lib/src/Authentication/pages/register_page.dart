@@ -38,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   label: 'Username',
                   hintText: 'Type your username',
                   controller: _usernameTextController,
-                  validatorFunction: Validators.isRequired,
+                  validatorFunction: Validators.betIsRequired,
                 ),
                 SizedBox(height: 10.s),
                 BoxTextField(
@@ -46,7 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   label: 'Password',
                   hintText: 'Type your password',
                   controller: _passwordTextController,
-                  validatorFunction: Validators.isRequired,
+                  validatorFunction: Validators.betIsRequired,
                 ),
                 SizedBox(height: 10.s),
                 ElevatedButton(

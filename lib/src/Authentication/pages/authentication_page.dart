@@ -42,7 +42,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                   label: 'Username',
                   hintText: 'Type your username',
                   controller: _usernameTextController,
-                  validatorFunction: Validators.isRequired,
+                  validatorFunction: Validators.betIsRequired,
                 ),
                 SizedBox(height: 10.s),
                 BoxTextField(
@@ -50,7 +50,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                   label: 'Password',
                   hintText: 'Type your password',
                   controller: _passwordTextController,
-                  validatorFunction: Validators.isRequired,
+                  validatorFunction: Validators.betIsRequired,
                 ),
                 SizedBox(height: 10.s),
                 Row(

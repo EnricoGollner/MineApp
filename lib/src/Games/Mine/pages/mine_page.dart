@@ -37,7 +37,7 @@ class _MinePageState extends State<MinePage> {
     return Scaffold(
       appBar: AppBar(
         leading: const Icon(Icons.diamond),
-        title: const Text('Mine Game'),
+        title: const Text('Mine'),
         actions: [
           Container(
             margin: const EdgeInsets.fromLTRB(0, 5, 10, 5),
@@ -49,8 +49,16 @@ class _MinePageState extends State<MinePage> {
             ),
             child: ValueListenableBuilder(
               valueListenable: getIt<UserController>().score,
-              builder: (context, score, child) => Text('Score: ${Formatters.doubleToCurrency(score)}')),
-          )
+              builder: (context, score, child) => Text('Saldo: ${Formatters.doubleToCurrency(score)}')),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.all(10),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+            ),
+            onPressed: () {},
+            child: const Text('Depositar'),
+          ),
         ],
       ),
       body: SingleChildScrollView(

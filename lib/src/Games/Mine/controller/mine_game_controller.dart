@@ -35,7 +35,7 @@ class MineGameController extends ChangeNotifier {
     _changeGameState(newState: GameState.running);
     _scoreBet = scoreToBet;
 
-    await _userController.updateScore(-scoreToBet).then((transactionAccepted) {
+    await _userController.updateScore(scoreToBet, operation: Operation.remove).then((transactionAccepted) {
       if (!transactionAccepted) {
         stopGame(newState: GameState.initial);
         showSnackBar(context, const BoxSnackBar.error(message: 'Saldo insuficiente!'));
@@ -65,7 +65,7 @@ class MineGameController extends ChangeNotifier {
 
   void stopGame({GameState newState = GameState.won}) {
     _changeGameState(newState: newState);
-    if(_gameState == GameState.won) getIt<UserController>().updateScore(_scoreBet + gains.value);
+    if(gameIsWon) getIt<UserController>().updateScore((_scoreBet * 2) + gains.value, operation: Operation.add);
     gains.value = 0.0;
     _scoreBet = 0.0;
     notifyListeners();

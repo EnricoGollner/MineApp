@@ -7,16 +7,16 @@ class Validators {
 
   Validators({required this.text});
 
-  static String? isRequired(String? text) {
+  static String? betIsRequired(String? text) {
     if(text == null || text.isEmpty) {
-      return "This field is required";
+      return 'O valor da aposta é obrigatório';
     }
 
     return null;
   }
   ///Método que verifica se um determinado valor é maior que um valor mínimo
   static String? greaterThanMinValueRequired(String? value, {num minValue = 0, required String nomeCampo, FocusNode? focusNode}) {
-    String? mensagem = Validators.isRequired(value);
+    String? mensagem = Validators.betIsRequired(value);
     if (mensagem != null) {
       focusNode?.requestFocus();
       return mensagem;
