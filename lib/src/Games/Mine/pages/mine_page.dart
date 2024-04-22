@@ -124,6 +124,7 @@ class _MinePageState extends State<MinePage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           BoxTextField(
+            isAutoFocus: true,
             controller: newFundTxtController,
             hintText: Formatters.doubleToCurrency(0.0),
             keyboardType: TextInputType.number,
