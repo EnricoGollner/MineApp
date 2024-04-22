@@ -40,7 +40,7 @@ class BoxMenuMine extends StatelessWidget {
             onTapOutside: (event) => Validators.handleDecimal(betTextController),
             inputFormatters: [
               DecimalInputFormatter.signalBasedOnLocale,
-              DecimalInputFormatter(decimalRange: 2, isCurrency: true),
+              DecimalInputFormatter(isCurrency: true),
             ],
           ),
         ),

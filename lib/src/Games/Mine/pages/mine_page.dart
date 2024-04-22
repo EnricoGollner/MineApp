@@ -7,7 +7,9 @@ import 'package:mine_app/src/core/theme/ui_helpers/ui_helpers.dart';
 import 'package:mine_app/src/Games/Mine/pages/widgets/box_card_mine.dart';
 
 import 'package:mine_app/src/Games/Mine/pages/widgets/box_dropdown_vertical.dart';
+import 'package:mine_app/src/core/utils/decimal_text_input_formatter.dart';
 import 'package:mine_app/src/core/utils/formatters.dart';
+import 'package:mine_app/src/shared/widgets/box_text_field.dart';
 
 class MinePage extends StatefulWidget {
   const MinePage({super.key});
@@ -56,7 +58,7 @@ class _MinePageState extends State<MinePage> {
               padding: const EdgeInsets.all(10),
               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
             ),
-            onPressed: () {},
+            onPressed: _showDialogToDeposit,
             child: const Text('Depositar'),
           ),
         ],
@@ -110,5 +112,37 @@ class _MinePageState extends State<MinePage> {
         ),
       ),
     );
+  }
+
+  void _showDialogToDeposit() {
+    final TextEditingController newFundTxtController = TextEditingController();
+
+    showDialog(context: context, builder: (context) {
+      return AlertDialog(
+      title: const Text('Depositar'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          BoxTextField(
+            controller: newFundTxtController,
+            hintText: Formatters.doubleToCurrency(0.0),
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              DecimalInputFormatter.signalBasedOnLocale,
+              DecimalInputFormatter(isCurrency: true),
+            ],
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              getIt<UserController>().updateScore(Formatters.defaultTextEditingControllerFormatter(text: newFundTxtController.text).toDouble(), operation: Operation.add);
+              Navigator.pop(context);
+            },
+            child: const Text('Depositar'),
+          ),
+        ],
+      ),
+    );
+    });
   }
 }
